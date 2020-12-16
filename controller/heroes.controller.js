@@ -146,16 +146,30 @@ exports.grouping = (req, res) => {
 }
 
 // Exportar paginacion
-exports.pagination = (req, res) => {
-    const page = 1;
-    const limit = 3;
-    try {
-        // Ejecutar query con numero de pagina y limite de documentos
-        const heroes = Heroe.find()
-            .limit(limit)
-            .skip((page - 1) * limit);
+exports.pagination = async(req, res) => {
+    
+       
+    const { page = 1, limit = 3 } = req.query;
 
-        res.send(heroes);
+    try {
+        
+        // Ejecutar query con numero de pagina y limite de documentos
+        const heroes = await Heroe.find()
+            .limit(limit * 1)
+            .skip((page - 1) * limit).exec();
+            
+        console.log(heroes);
+
+
+        //obtener el total de documentos en la colección
+        const total = await Heroe.countDocuments();
+
+        //enviar respuesta
+        res.json({
+            heroes,
+            totalPages: Math.ceil(total / limit),
+            currentPage: page
+        });
     } catch (err) {
         throwError(res, err);
     }

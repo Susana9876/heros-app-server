@@ -16,6 +16,6 @@ var heroesSchema = new mongoose.Schema({
     activo: Boolean
 });
 
-db.heroes = mongoose.model('heroes', heroesSchema, 'Heroes');
+db.heroes = mongoose.model('heroes', heroesSchema, 'Heros');
 
 module.exports = db;
